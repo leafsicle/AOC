@@ -3,3 +3,5 @@
         [D]
 [C] [M] [P]
  1   2   3
+
+ should be CMD
