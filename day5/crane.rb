@@ -7,8 +7,8 @@ def standardize_containers(containers)
   racked_containers = []
   crooked_stack.map do |stack|
     aligned = stack
-              .gsub(/([[:blank:]]{4})/, '_ ') # sub 4 spaces with _ => a blank space from the doc
-              .gsub(/([[:blank:]]{3})/, '_ ') # sub 3 spaces with _ => a blank from the document
+              .gsub(/([[:blank:]]{4})/, '_ ') # sub 4 spaces with "_" as a blank  from the doc
+              .gsub(/([[:blank:]]{3})/, '_ ') # sub 3 spaces with "_" as a blank from the doc
               .gsub(/([[:blank:]]|[^\w])/, '') # sub all spaces and non-word characters with nothing
     # retain the '_' and the before we dump the contents onto its side
     # if the stack is empty, then skip it
@@ -29,36 +29,47 @@ def instruction_processor(instructions)
   end
 end
 
-def move_container(plumb_stack, qty, from, to)
-  qty.times do
-    plumb_stack[to - 1] << plumb_stack[from - 1].pop
-  end
-  plumb_stack
-end
-
-def crate_mover_9001(plumb_stack, instruction_booklet)
-  instruction_booklet.each_with_index do |line, _index|
+def move_container(containers, instruction_booklet)
+  instruction_booklet.each do |line|
     qty, from, to = line
-    bucket = plumb_stack[from - 1].pop(qty)
-    # move the contents of bucket to the destination stack
-    plumb_stack[to - 1].concat(bucket)
+
+    qty.times do
+      containers[to - 1] << containers[from - 1].pop
+    end
   end
+  containers
 end
 
-def top_container(plumb_stack)
+def crate_mover9k(connexes, instruction_booklet)
+  instruction_booklet.each do |line|
+    qty, from, to = line
+    bucket = connexes[from - 1].pop(qty)
+    # move the contents of bucket to the destination stack
+    connexes[to - 1].concat(bucket)
+  end
+  connexes
+end
+
+def top_container(containers)
   quick_containers = []
-  plumb_stack.map do |connex|
+  containers.map do |connex|
     quick_containers << connex.join('').slice(-1)
   end
   quick_containers.join('')
 end
+
 # Separates the containers & instructions for easy use
-containers, instructions = File.read('input.txt').split("\n\n\n")
-# containers, instructions = File.read('sample.txt').split("\n\n")
-
-plumb_stack = standardize_containers(containers)
+# containers, instructions = File.read('input.txt').split("\n\n\n")
+containers, instructions = File.read('sample.txt').split("\n\n")
+connexes = standardize_containers(containers)
 instructions_array = instruction_processor(instructions)
-p "Using the OG setup we get #{top_container plumb_stack}"
+sample_instructions = instructions_array.clone
 
-crate_mover_9001(plumb_stack, instructions_array)
-p "Using the new and improved setup we get #{top_container plumb_stack}"
+# # Part 1
+# part1_stack = move_container(connexes, sample_instructions)
+# part1_ans = top_container(part1_stack)
+# p "Using the OG setup we get #{part1_ans}"
+
+# Part 2
+part2_stack = crate_mover9k(connexes, sample_instructions)
+p "Using the new and improved setup we get #{top_container part2_stack}"
