@@ -1,8 +1,8 @@
 #!/usr/bin/env ruby
 # frozen_string_literal: true
 
-def fix_containers(container_yard)
-  crooked_stack = container_yard.split("\n")
+def standardize_containers(containers)
+  crooked_stack = containers.split("\n")
   crooked_stack.pop # remove the last empty line
   racked_containers = []
   crooked_stack.map do |stack|
@@ -37,14 +37,11 @@ def move_container(plumb_stack, qty, from, to)
 end
 
 def crate_mover_9001(plumb_stack, instruction_booklet)
-  instruction_booklet.each_with_index do |line, index|
+  instruction_booklet.each_with_index do |line, _index|
     qty, from, to = line
-    puts "Step #{index + 1}: move #{qty} containers from index #{from - 1} to index #{to - 1}"
     bucket = plumb_stack[from - 1].pop(qty)
-    p "Bucket: #{bucket}"
     # move the contents of bucket to the destination stack
     plumb_stack[to - 1].concat(bucket)
-    p plumb_stack
   end
 end
 
@@ -53,13 +50,15 @@ def top_container(plumb_stack)
   plumb_stack.map do |connex|
     quick_containers << connex.join('').slice(-1)
   end
-  p quick_containers.join('')
+  quick_containers.join('')
 end
 # Separates the containers & instructions for easy use
-container_yard, instructions = File.read('input.txt').split("\n\n\n")
-# part 1
-plumb_stack = fix_containers(container_yard)
+containers, instructions = File.read('input.txt').split("\n\n\n")
+# containers, instructions = File.read('sample.txt').split("\n\n")
+
+plumb_stack = standardize_containers(containers)
 instructions_array = instruction_processor(instructions)
-# top_container plumb_stack # decomment for answer to part 1
+p "Using the OG setup we get #{top_container plumb_stack}"
+
 crate_mover_9001(plumb_stack, instructions_array)
-top_container plumb_stack # decomment for answer to part 1
+p "Using the new and improved setup we get #{top_container plumb_stack}"
