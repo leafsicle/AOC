@@ -10,4 +10,4 @@
 
 - [ ] [Day 4: Camp Cleanup](./day4)
 
-- [ ] [Day 5: Supply Stacks](./day5)
+- [x] [Day 5: Supply Stacks](./day5)
