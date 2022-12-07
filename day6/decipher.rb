@@ -1,20 +1,30 @@
 #!/usr/bin/env ruby
 # frozen_string_literal: true
 
-# Class for solving the problem
 class Tuner
   def initialize(data)
-    @data = parse(data)[0]
+    @data = parse(data)
   end
 
   def parse(input)
-    input.map do |line|
-      line.chars
+    input.map(&:chars).flatten # may need the flatten
+  end
+
+  def start_of_packet_detector(signals)
+    viewport = []
+    signals.each_with_index do |signal, _index|
+      if viewport.size < 4
+        viewport << signal
+      else
+        viewport.shift
+        viewport << signal
+      end
+      return _index + 1 if viewport == viewport.uniq && viewport.size == 4
     end
   end
 
   def solve1
-    p @data
+    p start_of_packet_detector @data
   end
 end
 
