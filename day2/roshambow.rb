@@ -1,35 +1,91 @@
 #!/usr/bin/env ruby
 # frozen_string_literal: true
 
-t1 = Process.clock_gettime(Process::CLOCK_MONOTONIC)
+require 'io/console'
+# mandated comment
+class RoshamBowMaker
+  def initialize(data)
+    @data = parse(data)
+  end
 
-opponent_guide = {
-  A: [:Y, 1], # rock, scissors, worth
-  B: [:Z, 2],
-  C: [:X, 3]
-}
+  def parse(input)
+    def win?(user, opponent)
+      conditions = {
+        'Rock' => 'Scissors',
+        'Paper' => 'Rock',
+        'Scissors' => 'Paper'
+      }
+      if conditions[user] == opponent
+        puts 'You win!'
+      elsif user == opponent
+        puts 'Its a draw!'
+      else
+        puts 'Opponent wins!'
+      end
+    end
 
-file = File.open('sample.txt')
-file.readlines.map(&:chomp).each do |line|
-  opponent_choice = line.split(' ')[0].to_sym
-  user_choice = line.split(' ')[1].to_sym
-  # based on the opponent's choice, we can determine what the user should play
-  p opponent_guide[opponent_choice][0] == user_choice ? 'yes' : 'no'
+    def convert(user, opponent)
+      opponent_guide = {
+        'A' => 'Rock',
+        'B' => 'Paper',
+        'C' => 'Scissors'
+      }
+      converted_user_guide = {
+        'X' => 'Rock',
+        'Y' => 'Paper',
+        'Z' => 'Scissors'
+      }
+      # p opponent_guide[opponent]
+      # p converted_user_guide[user]
+      win?(converted_user_guide[user], opponent_guide[opponent])
+    end
+    user_score = 0
+
+    input.readlines.map(&:chomp).each_with_index do |line, _index|
+      # p line
+      opponent_choice = line.split(' ')[0]
+      user_choice = line.split(' ')[1]
+      convert user_choice, opponent_choice
+      # popponent_guide[opponent_choice]
+      # use the opponent guide to get the "correct" choice
+      # I
+
+      # p "#{win? 'Rock', 'Scissors'}"
+    end
+  end
 end
-t2 = Process.clock_gettime(Process::CLOCK_MONOTONIC)
 
-#   # (r:1, p:2, s:3)
-#   # (L:0, D:3, W:6).
+def file_list
+  Dir.glob('*.txt')
+end
 
-# rd1: A Y (8= 2+ 6) as A=Rock = 2 v P
-# This ends in a win for you with a score of 8 (2 because you chose Paper + 6 because you won).
-# rd2: B X (1 = 1+ 0)
-# In the second round, your opponent will choose Paper (B), and you should choose Rock (X).
-# results in loss for self with a score of 1 (1 + 0).
-# rd3: C Z (6 = 3+ 3)
-# The third round is a draw with both players choosing Scissors, giving you a score of 3 + 3 = 6.
-# example total score of 15 (8 + 1 + 6)
-# What would your total score be if everything goes exactly according to your strategy guide?
-delta = t2 - t1
-delta_in_milliseconds = delta * 1000.0000000
-p "Time elapsed #{delta_in_milliseconds} milliseconds"
+def show_files
+  catcher = file_list
+  catcher.each_with_index do |entry, index|
+    puts "#{index + 1}: #{entry}"
+  end
+end
+
+def user_prompt
+  show_files
+  puts 'Against which file do you want to test your solution?'
+  gets.chomp
+end
+
+def prompt_for_txt_file
+  user_choice = user_prompt
+  if user_choice.to_i > file_list.length
+    $stdout.clear_screen
+    puts 'Invalid choice. Try again.'
+    exit 1
+  else
+    file_list[user_choice.to_i - 1]
+  end
+end
+
+def main
+  file_name = prompt_for_txt_file
+  file_data = File.open(file_name)
+  RoshamBowMaker.new(file_data)
+end
+main
