@@ -8,8 +8,10 @@
 
 - [ ] [Day 3: Rucksack Reorganization](./day3)
 
-- [ ] [Day 4: Camp Cleanup](./day4)
+- [x] [Day 4: Camp Cleanup](./day4)
 
 - [x] [Day 5: Supply Stacks](./day5)
 
-- [ ] [Day 6: Tuning Trouble](./day6)
+- [x] [Day 6: Tuning Trouble](./day6)
+
+- [ ] [Day 7: No Space Left On Device](./day7)
