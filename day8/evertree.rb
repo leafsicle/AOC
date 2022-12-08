@@ -6,8 +6,8 @@ require 'io/console'
 class Lookout
   def initialize(data)
     @data = data
-    @forest_grid = drone_footage(@data)
-    count_trees @forest_grid
+    @tree_grid = drone_footage(@data)
+    count_trees @tree_grid
   end
 
   def drone_footage(input)
@@ -21,19 +21,19 @@ class Lookout
 end
 
 def count_trees(forest)
-  # I need to write a method that accepts a 2 dimensional array and returns true if that tree is taller than 's 4 coordinates
-  # we don't need to consider the FIRST OR LAST ROWS OR COLUMNS
+  tall_tree_count = 0
   # unless index !=0 && index != forest_grid.length - 1 && line_index != 0 && line_index != line.length - 1
   p forest
-  forest.each_with_index do |line, index|
-    next if index == 0 || index == forest.length - 1
-
-    line.each_with_index do |tree, line_index|
-      next if line_index == 0 || line_index == line.length - 1
-
-      p tree
+  forest.each_with_index do |tree_row, index|
+    if index.zero? || index == forest.length - 1
+      tall_tree_count += tree_row.length
+    else
+      tree_row.each_with_index do |_tree, tree_row_index|
+        tall_tree_count += 1 if tree_row_index.zero? || tree_row_index == tree_row.length - 1
+      end
     end
   end
+  p tall_tree_count
 end
 
 def file_list
