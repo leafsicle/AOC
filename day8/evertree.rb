@@ -7,7 +7,8 @@ class Lookout
   def initialize(data)
     @data = data
     @tree_grid = drone_footage(@data)
-    count_trees @tree_grid
+    part1 = count_trees @tree_grid
+    p "Part 1: Visible Trees #{part1}"
   end
 
   def drone_footage(input)
@@ -22,18 +23,29 @@ end
 
 def count_trees(forest)
   tall_tree_count = 0
-  # unless index !=0 && index != forest_grid.length - 1 && line_index != 0 && line_index != line.length - 1
-  p forest
   forest.each_with_index do |tree_row, index|
-    if index.zero? || index == forest.length - 1
-      tall_tree_count += tree_row.length
-    else
-      tree_row.each_with_index do |_tree, tree_row_index|
-        tall_tree_count += 1 if tree_row_index.zero? || tree_row_index == tree_row.length - 1
+    # if the row is the first or last row, count all trees else +2 for the e
+    perimeter_trees = index.zero? || index == forest.length - 1 ? tree_row.length : 2
+    row_visible_trees = 0
+    column_visible_trees = 0
+    p tree_row
+    tree_row.each_with_index do |tree, tree_row_idx|
+      left_hedge_height = tree_row.first
+      right_hedge_height = tree_row.last
+      next if tree_row_idx.zero? || tree_row_idx == tree_row.length - 1 # if the tree is on the left or right edge, next
+
+      if left_hedge_height < tree
+        # if the left edge is lower than the tree, it is visible
+        row_visible_trees += 1 # a
+        # left_hedge_height = tree # set the left edge to the height of the tree as the _next-tallest_ tree
+        p "Left Hedge #{left_hedge_height} is lower than tree: #{tree}"
+        next
       end
+      p "compared left hedge #{left_hedge_height} to tree #{tree}"
     end
+    tall_tree_count += perimeter_trees
   end
-  p tall_tree_count
+  p "Tall Tree Count: #{tall_tree_count}"
 end
 
 def file_list
