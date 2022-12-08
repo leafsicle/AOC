@@ -5,23 +5,31 @@ require 'io/console'
 # mandated comment
 class RoshamBowMaker
   def initialize(data)
-    @data = roshambo(data)
+    @data = data
+    roshambo(@data)
   end
 
-  def convert_to_weapon(user, opponent)
-    opponent_guide = {
-      'A' => 'Rock',
-      'B' => 'Paper',
-      'C' => 'Scissors'
-    }
+  def convert_user_weapon(user)
     converted_user_guide = {
       'X' => 'Rock',
       'Y' => 'Paper',
       'Z' => 'Scissors'
     }
-    [converted_user_guide[user], opponent_guide[opponent]]
+    converted_user_guide[user]
   end
 
+  def convert_opponent_weapon(opponent)
+    opponent_guide = {
+      'A' => 'Rock',
+      'B' => 'Paper',
+      'C' => 'Scissors'
+    }
+    opponent_guide[opponent]
+  end
+
+  # def convert_to_weapon2(choice)
+  #   guide = choice.match?(/[A-C]/) ? ('Rock') : 'Paper'
+  # end
   def match_success_score_boost(user, opponent)
     conditions = {
       'Rock' => 'Scissors',
@@ -37,19 +45,49 @@ class RoshamBowMaker
     end
   end
 
+  def map_intent_to_choice(opp_choice, intent)
+    opp_weapon = convert_opponent_weapon(opp_choice)
+    conditions = {
+      'Rock' => 'Scissors',
+      'Paper' => 'Rock',
+      'Scissors' => 'Paper'
+    }
+    if intent == 'Y'
+      p 'intent is to Tie'
+      opp_weapon
+    elsif intent == 'Z'
+      p 'intent is to win'
+      conditions.fetch(conditions.fetch(opp_weapon))
+    elsif intent == 'X'
+      p 'intent is to lose'
+      conditions[opp_weapon]
+    end
+  end
+
   def roshambo(input)
-    total_score = 0
+    score_part1 = 0
+    score_part2 = 0
     input.readlines.map(&:chomp).each_with_index do |line, _index|
       playbook = line.split(' ')
       opponent_choice = playbook[0]
       user_choice = playbook[1]
       weapon_points = %w[X Y Z].index(user_choice) + 1
-      user_weapon, opponent_weapon = convert_to_weapon(user_choice, opponent_choice)
+      # part 1
+      user_weapon = convert_user_weapon(user_choice)
+      opponent_weapon = convert_opponent_weapon(opponent_choice)
       outcome = match_success_score_boost(user_weapon, opponent_weapon)
-      # p "Round #{_index + 1}: #{user_weapon} vs #{opponent_weapon} = #{outcome} points"
-      total_score += outcome + weapon_points
+      score_part1 += outcome + weapon_points
+
+      # part 2
+      intended_outcome = playbook[1]
+      intended_choice = map_intent_to_choice(opponent_choice, intended_outcome)
+      p "Me #{intended_choice}"
+      # part2_score_boost = match_success_score_boost(intended_choice, opponent_weapon)
+      p "Them #{opponent_weapon}"
+      score_part2 += weapon_points
     end
-    p total_score
+    # puts "part 1: #{score_part1}"
+    puts "part 2: #{score_part2}"
   end
 end
 
