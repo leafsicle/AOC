@@ -8,49 +8,43 @@ class RoshamBowMaker
     @data = parse(data)
   end
 
-  def parse(input)
-    def win?(user, opponent)
-      conditions = {
-        'Rock' => 'Scissors',
-        'Paper' => 'Rock',
-        'Scissors' => 'Paper'
-      }
-      if conditions[user] == opponent
-        puts 'You win!'
-      elsif user == opponent
-        puts 'Its a draw!'
-      else
-        puts 'Opponent wins!'
-      end
+  def roshambo(user, opponent) # rubocop:disable Metrics/MethodLength
+    conditions = {
+      'Rock' => 'Scissors',
+      'Paper' => 'Rock',
+      'Scissors' => 'Paper'
+    }
+    if conditions[user] == opponent
+      puts 'You win!'
+    elsif user == opponent
+      puts 'Its a draw!'
+    else
+      puts 'Opponent wins!'
     end
+  end
 
-    def convert(user, opponent)
-      opponent_guide = {
-        'A' => 'Rock',
-        'B' => 'Paper',
-        'C' => 'Scissors'
-      }
-      converted_user_guide = {
-        'X' => 'Rock',
-        'Y' => 'Paper',
-        'Z' => 'Scissors'
-      }
-      # p opponent_guide[opponent]
-      # p converted_user_guide[user]
-      win?(converted_user_guide[user], opponent_guide[opponent])
-    end
+  def convert(user, opponent)
+    opponent_guide = {
+      'A' => 'Rock',
+      'B' => 'Paper',
+      'C' => 'Scissors'
+    }
+    converted_user_guide = {
+      'X' => 'Rock',
+      'Y' => 'Paper',
+      'Z' => 'Scissors'
+    }
+    [converted_user_guide[user], opponent_guide[opponent]]
+  end
+
+  def parse(input)
     user_score = 0
 
     input.readlines.map(&:chomp).each_with_index do |line, _index|
       # p line
       opponent_choice = line.split(' ')[0]
       user_choice = line.split(' ')[1]
-      convert user_choice, opponent_choice
-      # popponent_guide[opponent_choice]
-      # use the opponent guide to get the "correct" choice
-      # I
-
-      # p "#{win? 'Rock', 'Scissors'}"
+      user_weapon, opponent_weapon = convert(user_choice, opponent_choice)
     end
   end
 end
