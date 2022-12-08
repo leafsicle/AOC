@@ -52,14 +52,11 @@ class RoshamBowMaker
       'Paper' => 'Rock',
       'Scissors' => 'Paper'
     }
-    if intent == 'Y'
-      p 'intent is to Tie'
+    if intent == 'Y' # intent is to Tie
       opp_weapon
-    elsif intent == 'Z'
-      p 'intent is to win'
+    elsif intent == 'Z' # intent is to win
       conditions.fetch(conditions.fetch(opp_weapon))
-    elsif intent == 'X'
-      p 'intent is to lose'
+    elsif intent == 'X' # intent is to lose
       conditions[opp_weapon]
     end
   end
@@ -81,12 +78,14 @@ class RoshamBowMaker
       # part 2
       intended_outcome = playbook[1]
       intended_choice = map_intent_to_choice(opponent_choice, intended_outcome)
-      p "Me #{intended_choice}"
-      # part2_score_boost = match_success_score_boost(intended_choice, opponent_weapon)
-      p "Them #{opponent_weapon}"
-      score_part2 += weapon_points
+      part2_outcome_score = match_success_score_boost(intended_choice, opponent_weapon)
+      # p "part2_outcome_score: #{part2_outcome_score} points for a #{intended_choice} vs #{opponent_weapon}"
+      weapon_points2 = %w[Rock Paper Scissors].index(intended_choice) + 1
+      p intended_choice
+      round_score = part2_outcome_score + weapon_points2
+      score_part2 += round_score
     end
-    # puts "part 1: #{score_part1}"
+    puts "part 1: #{score_part1}"
     puts "part 2: #{score_part2}"
   end
 end
