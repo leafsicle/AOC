@@ -5,25 +5,10 @@ require 'io/console'
 # mandated comment
 class RoshamBowMaker
   def initialize(data)
-    @data = parse(data)
+    @data = roshambo(data)
   end
 
-  def roshambo(user, opponent) # rubocop:disable Metrics/MethodLength
-    conditions = {
-      'Rock' => 'Scissors',
-      'Paper' => 'Rock',
-      'Scissors' => 'Paper'
-    }
-    if conditions[user] == opponent
-      puts 'You win!'
-    elsif user == opponent
-      puts 'Its a draw!'
-    else
-      puts 'Opponent wins!'
-    end
-  end
-
-  def convert(user, opponent)
+  def convert_to_weapon(user, opponent)
     opponent_guide = {
       'A' => 'Rock',
       'B' => 'Paper',
@@ -37,15 +22,34 @@ class RoshamBowMaker
     [converted_user_guide[user], opponent_guide[opponent]]
   end
 
-  def parse(input)
-    user_score = 0
-
-    input.readlines.map(&:chomp).each_with_index do |line, _index|
-      # p line
-      opponent_choice = line.split(' ')[0]
-      user_choice = line.split(' ')[1]
-      user_weapon, opponent_weapon = convert(user_choice, opponent_choice)
+  def match_success_score_boost(user, opponent)
+    conditions = {
+      'Rock' => 'Scissors',
+      'Paper' => 'Rock',
+      'Scissors' => 'Paper'
+    }
+    if conditions[user] == opponent
+      6
+    elsif user == opponent
+      3
+    else
+      0
     end
+  end
+
+  def roshambo(input)
+    total_score = 0
+    input.readlines.map(&:chomp).each_with_index do |line, _index|
+      playbook = line.split(' ')
+      opponent_choice = playbook[0]
+      user_choice = playbook[1]
+      weapon_points = %w[X Y Z].index(user_choice) + 1
+      user_weapon, opponent_weapon = convert_to_weapon(user_choice, opponent_choice)
+      outcome = match_success_score_boost(user_weapon, opponent_weapon)
+      # p "Round #{_index + 1}: #{user_weapon} vs #{opponent_weapon} = #{outcome} points"
+      total_score += outcome + weapon_points
+    end
+    p total_score
   end
 end
 
