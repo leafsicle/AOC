@@ -6,6 +6,7 @@ require 'io/console'
 class Lookout
   def initialize(data)
     @data = data
+    p '******************************************'
     @tree_grid = drone_footage(@data)
     part1 = count_trees @tree_grid
     p "Part 1: Visible Trees #{part1}"
@@ -23,28 +24,38 @@ end
 
 def count_trees(forest)
   tall_tree_count = 0
+  tracking_arr = forest.clone
   forest.each_with_index do |tree_row, index|
     # if the row is the first or last row, count all trees else +2 for the e
-    perimeter_trees = index.zero? || index == forest.length - 1 ? tree_row.length : 2
+    new_row = []
+    perimeter_trees = if index.zero? || index == forest.length - 1
+                        tree_row.length
+                      else
+                        2
+                      end
     row_visible_trees = 0
-    column_visible_trees = 0
+    # column_visible_trees = 0
     p tree_row
     tree_row.each_with_index do |tree, tree_row_idx|
-      left_hedge_height = tree_row.first
-      right_hedge_height = tree_row.last
-      next if tree_row_idx.zero? || tree_row_idx == tree_row.length - 1 # if the tree is on the left or right edge, next
-
-      if left_hedge_height < tree
-        # if the left edge is lower than the tree, it is visible
-        row_visible_trees += 1 # a
-        # left_hedge_height = tree # set the left edge to the height of the tree as the _next-tallest_ tree
-        p "Left Hedge #{left_hedge_height} is lower than tree: #{tree}"
+      left_hedge_height = tree_row[0]
+      # right_hedge_height = tree_row[0]
+      tracking_arr[index][tree_row_idx] = 0 if index == 0 || index == forest.length - 1
+      if tree_row_idx.zero? || tree_row_idx == tree_row.length - 1 # if the tree is on the left or right edge, next
+        tracking_arr[index][tree_row_idx] = 0
         next
       end
-      p "compared left hedge #{left_hedge_height} to tree #{tree}"
+
+      next unless left_hedge_height < tree
+
+      # if the left edge is lower than the tree, it is visible
+      row_visible_trees += 1 # a
+      left_hedge_height = tree # set the left edge to the height of the tree as the _next-tallest_ tree
+      next
     end
     tall_tree_count += perimeter_trees
   end
+  p "tracking_arr: #{tracking_arr}"
+
   p "Tall Tree Count: #{tall_tree_count}"
 end
 
