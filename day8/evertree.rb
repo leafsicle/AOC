@@ -2,7 +2,6 @@
 # frozen_string_literal: true
 
 require 'io/console'
-# mandated comment
 
 def file_list
   Dir.glob('*.txt')
@@ -41,9 +40,17 @@ def drone_footage(input)
   forest_grid
 end
 
-def look_around(forest, row, column)
-  # outer edge of the forest
-  return 1 if (row.zero? || column.zero?) || row == forest.length - 1 || column == forest.first.length - 1
+def look_around(forest, row_index, column_index)
+  current_height = forest[row_index][column_index]
+  row = forest[row_index]
+  column = forest.transpose[column_index]
+  if (row_index.zero? || column_index.zero?) || row_index == forest.length - 1 || column_index == forest.first.length - 1
+    return 1
+  end
+  return 1 if current_height > row[0...column_index].max # looking left
+  return 1 if current_height > row[column_index + 1..-1].max # looking right
+  return 1 if current_height > column[0...row_index].max # looking down
+  return 1 if current_height > column[row_index + 1..-1].max # looking up
 
   0
 end
@@ -56,9 +63,72 @@ def visibility_map(forest)
   end
 end
 
+def scenic_view(trees, i, j)
+  current_height = trees[i][j]
+
+  row = trees[i]
+  col = trees.transpose[j]
+  scores = []
+  # Left
+  score = 0
+  (j - 1).downto(0) do |k|
+    score += 1
+    break if row[k] >= current_height
+  end
+  scores << score
+
+  # right
+  score = 0
+  (j + 1...trees.first.length).each do |k|
+    score += 1
+    break if row[k] >= current_height
+  end
+  scores << score
+
+  # above
+  score = 0
+  (i - 1).downto(0).each do |k|
+    score += 1
+    break if col[k] >= current_height
+  end
+  scores << score
+  # below
+  score = 0
+  (i + 1...trees.length).each do |k|
+    score += 1
+    break if col[k] >= current_height
+  end
+  scores << score
+  scores.inject(:*)
+end
+
 def main
   file_contents = File.open(prompt_for_txt_file)
   forest = drone_footage(file_contents)
-  p visibility_map(forest)
+  p visibility_map(forest).flatten.sum
+  return unless ARGV.empty?
+
+  require 'rspec/autorun'
+  RSpec.describe 'day8' do
+    it 'works with example input' do
+      expect(visibility_map(forest)).to eq(
+        [
+          [1, 1, 1, 1, 1],
+          [1, 1, 1, 0, 1],
+          [1, 1, 0, 1, 1],
+          [1, 0, 1, 0, 1],
+          [1, 1, 1, 1, 1]
+        ]
+      )
+    end
+    it 'works with example scenic input' do
+      expect(scenic_view(forest, 1, 2)).to eq(
+        4
+      )
+      expect(scenic_view(forest, 3, 2)).to eq(
+        8
+      )
+    end
+  end
 end
 main
