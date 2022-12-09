@@ -58,7 +58,8 @@ end
 def visibility_map(forest)
   forest.length.times.map do |row|
     forest.first.length.times.map do |column|
-      look_around(forest, row, column)
+      # look_around(forest, row, column)
+      scenic_view(forest, row, column)
     end
   end
 end
@@ -105,7 +106,7 @@ end
 def main
   file_contents = File.open(prompt_for_txt_file)
   forest = drone_footage(file_contents)
-  p visibility_map(forest).flatten.sum
+  p visibility_map(forest).flatten.max
   return unless ARGV.empty?
 
   require 'rspec/autorun'
