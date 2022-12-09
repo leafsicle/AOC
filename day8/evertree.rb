@@ -3,61 +3,6 @@
 
 require 'io/console'
 # mandated comment
-class Lookout
-  def initialize(data)
-    @data = data
-    p '******************************************'
-    @tree_grid = drone_footage(@data)
-    part1 = count_trees @tree_grid
-    p "Part 1: Visible Trees #{part1}"
-  end
-
-  def drone_footage(input)
-    forest_grid = []
-    input.readlines.map(&:chomp).each_with_index do |line, _index|
-      playbook = line.split('').map(&:to_i)
-      forest_grid << playbook
-    end
-    forest_grid
-  end
-end
-
-def count_trees(forest)
-  tall_tree_count = 0
-  tracking_arr = forest.clone
-  forest.each_with_index do |tree_row, index|
-    # if the row is the first or last row, count all trees else +2 for the e
-    new_row = []
-    perimeter_trees = if index.zero? || index == forest.length - 1
-                        tree_row.length
-                      else
-                        2
-                      end
-    row_visible_trees = 0
-    # column_visible_trees = 0
-    p tree_row
-    tree_row.each_with_index do |tree, tree_row_idx|
-      left_hedge_height = tree_row[0]
-      # right_hedge_height = tree_row[0]
-      tracking_arr[index][tree_row_idx] = 0 if index == 0 || index == forest.length - 1
-      if tree_row_idx.zero? || tree_row_idx == tree_row.length - 1 # if the tree is on the left or right edge, next
-        tracking_arr[index][tree_row_idx] = 0
-        next
-      end
-
-      next unless left_hedge_height < tree
-
-      # if the left edge is lower than the tree, it is visible
-      row_visible_trees += 1 # a
-      left_hedge_height = tree # set the left edge to the height of the tree as the _next-tallest_ tree
-      next
-    end
-    tall_tree_count += perimeter_trees
-  end
-  p "tracking_arr: #{tracking_arr}"
-
-  p "Tall Tree Count: #{tall_tree_count}"
-end
 
 def file_list
   Dir.glob('*.txt')
@@ -87,9 +32,33 @@ def prompt_for_txt_file
   end
 end
 
+def drone_footage(input)
+  forest_grid = []
+  input.readlines.map(&:chomp).each_with_index do |line, _index|
+    playbook = line.split('').map(&:to_i)
+    forest_grid << playbook
+  end
+  forest_grid
+end
+
+def look_around(forest, row, column)
+  # outer edge of the forest
+  return 1 if (row.zero? || column.zero?) || row == forest.length - 1 || column == forest.first.length - 1
+
+  0
+end
+
+def visibility_map(forest)
+  forest.length.times.map do |row|
+    forest.first.length.times.map do |column|
+      look_around(forest, row, column)
+    end
+  end
+end
+
 def main
-  file_name = prompt_for_txt_file
-  file_data = File.open(file_name)
-  Lookout.new(file_data)
+  file_contents = File.open(prompt_for_txt_file)
+  forest = drone_footage(file_contents)
+  p visibility_map(forest)
 end
 main
