@@ -1,16 +1,56 @@
 # Advent of Code
 
-## 2025 <img src="https://progress-bar.xyz/0" alt="2025 Progress"/>
+Solutions for [Advent of Code](https://adventofcode.com) challenges.
 
-[AOC 2025](https://adventofcode.com/2025/about)
+## Current Year
 
-## 2024 <img src="https://progress-bar.xyz/4" alt="2024 Progress"/>
+[2025 Advent of Code](https://adventofcode.com/2025/about) <img src="https://progress-bar.xyz/0" alt="Overall Progress"/>
 
-[AOC 2024](https://adventofcode.com/2024/about)
+## Setup
 
-## 2022 <img src="https://progress-bar.xyz/0" alt="2022 Progress"/>
+### Install the `new_day` script
 
-[AOC 2022](https://adventofcode.com/2022/about)
+Add the `bin` directory to your PATH by adding this to your `~/.zshrc` or `~/.bashrc`:
 
-[2022](2022/README.md)
-[AOC Homepage](https://adventofcode.com/2022/about)
+```bash
+export PATH="/Users/mcooke/dev/AOC/bin:$PATH"
+# Then reload your shell:
+source ~/.zshrc  # or source ~/.bashrc
+```
+
+### Create a new day
+
+Navigate to the year directory and run:
+
+```bash
+cd 2024
+new_day 2
+```
+
+This creates:
+
+```filetree --max-depth 1
+day2/
+  example.txt       # Example input from the puzzle
+  solution.rb       # Your solution
+  solution_test.rb  # Tests using Minitest
+```
+
+### Run tests
+
+```bash
+cd day2
+ruby solution_test.rb
+```
+
+### Run your solution
+
+```bash
+ruby solution.rb
+```
+
+## Past Years
+
+[2024](https://adventofcode.com/2024/about) <img src="https://progress-bar.xyz/4" alt="Overall Progress"/>
+
+[2022](https://adventofcode.com/2022/about) <img src="https://progress-bar.xyz/0" alt="Overall Progress"/>

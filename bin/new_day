@@ -1,0 +1,66 @@
+#!/usr/bin/env ruby
+
+if ARGV.empty?
+  puts "Usage: new_day <day_number>"
+  puts "Example: new_day 1"
+  exit 1
+end
+
+day = ARGV[0]
+day_dir = "day#{day}"
+
+if Dir.exist?(day_dir)
+  puts "Directory #{day_dir} already exists!"
+  exit 1
+end
+
+Dir.mkdir(day_dir)
+puts "Created #{day_dir}/"
+
+# Create example.txt
+File.write("#{day_dir}/example.txt", "")
+puts "Created #{day_dir}/example.txt"
+
+# Create solution.rb
+solution_content = <<~RUBY
+  # Your solution goes here
+
+  def solve_part1(filename)
+    # TODO: Implement your solution
+  end
+
+  def solve_part2(filename)
+    # TODO: Implement your solution
+  end
+
+  if __FILE__ == $0
+    puts "Part 1: \#{solve_part1('input.txt')}"
+    puts "Part 2: \#{solve_part2('input.txt')}"
+  end
+RUBY
+
+File.write("#{day_dir}/solution.rb", solution_content)
+puts "Created #{day_dir}/solution.rb"
+
+# Create solution_test.rb
+test_content = <<~RUBY
+  require "minitest/autorun"
+  require_relative "./solution"
+
+  class SolutionTest < Minitest::Test
+    def test_part1_with_example
+      # TODO: Add your expected result
+      # assert_equal expected, solve_part1("example.txt")
+    end
+
+    def test_part2_with_example
+      # TODO: Add your expected result
+      # assert_equal expected, solve_part2("example.txt")
+    end
+  end
+RUBY
+
+File.write("#{day_dir}/solution_test.rb", test_content)
+puts "Created #{day_dir}/solution_test.rb"
+
+puts "\nDone! Run tests with: cd #{day_dir} && ruby solution_test.rb"
