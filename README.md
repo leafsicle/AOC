@@ -8,7 +8,7 @@
 
 [AOC 2024](https://adventofcode.com/2024/about)
 
-- [x] [Day 1: Historian Hysteria] | [Prompt](https://adventofcode.com/2024/day/1)
+- [x] [Day 1](https://adventofcode.com/2024/day/1)
 
 ## 2022 <img src="https://progress-bar.xyz/0" alt="2022 Progress"/>
 
