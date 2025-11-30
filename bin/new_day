@@ -21,10 +21,10 @@ puts "Created #{day_dir}/"
 File.write("#{day_dir}/example.txt", "")
 puts "Created #{day_dir}/example.txt"
 
+File.write("#{day_dir}/input.txt", "")
+puts "Created #{day_dir}/input.txt"
 # Create solution.rb
 solution_content = <<~RUBY
-  # Your solution goes here
-
   def solve_part1(filename)
     # TODO: Implement your solution
   end
