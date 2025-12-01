@@ -1,9 +1,9 @@
-# [Advent of Code](https://adventofcode.com)
+# [Advent of Code](https://adventofcode.com/2025/about)
 
 
 ## 2025
 
-[2025 Advent of Code](https://adventofcode.com/2025/about) <img src="https://progress-bar.xyz/0" alt="Overall Progress"/>
+<img src="https://progress-bar.xyz/0" alt="Overall Progress"/>
 
 ## Setup
 
