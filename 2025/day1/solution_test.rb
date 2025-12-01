@@ -1,0 +1,15 @@
+require "minitest/autorun"
+require_relative "./solution"
+
+class SolutionTest < Minitest::Test
+  def test_part1_with_example
+    expected = 3
+    assert_equal expected, solve_part1("example.txt")
+  end
+
+  def test_part2_with_example
+    # TODO
+    # expected = ...
+    # assert_equal expected, solve_part2("example.txt")
+  end
+end
