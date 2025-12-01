@@ -51,6 +51,6 @@ ruby solution.rb
 
 ## Past Years
 
-[2024](https://adventofcode.com/2024/about) <img src="https://progress-bar.xyz/4" alt="Overall Progress"/>
+[2024](https://adventofcode.com/2024/about) <img src="https://progress-bar.xyz/8" alt="Overall Progress"/>
 
 [2022](https://adventofcode.com/2022/about) <img src="https://progress-bar.xyz/0" alt="Overall Progress"/>

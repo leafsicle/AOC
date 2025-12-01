@@ -1,29 +1,55 @@
 def solve_part1(filename)
-  lines = File.readlines(filename, chomp: true)
   safe_reports = 0
+  lines = File.readlines(filename, chomp: true)
   lines.each do |line|
-    # split the line into an array of integers
-    lane = line.split(" ").map { |l| l.to_i }
-    # check if the levels are either all increasing or all decreasing
-    next unless sorted?(lane)
-    # check if any two adjacent levels differ by at least one and at most three
-    lane.each_with_index { |x, i|
-      # skip the last comparison as there is no next entry
-      if i != lane.length - 1
-        # check if the difference between the two adjacent levels is between 1 and 3
-        variance = (x - lane[i + 1]).abs
-        # if the difference is between 1 and 3 for any two adjacent levels, the report is not safe
-        break unless (1..3).cover?(variance)
-      else
-        safe_reports += 1
-      end
-    }
+    report = line.split(" ").map { |l| l.to_i }
+    safe_reports += 1 if safe_report?(report)
   end
   safe_reports
 end
 
 def solve_part2(filename)
-  nil
+  safe_reports = 0
+  lines = File.readlines(filename, chomp: true)
+  lines.each do |line|
+    report = line.split(" ").map { |l| l.to_i }
+
+    # First check if it's already safe
+    if safe_report?(report)
+      safe_reports += 1
+      next
+    end
+
+    # Try removing each level one at a time
+    found_safe = false
+    report.each_with_index do |_level, index|
+      # Create a new array without the element at this index
+      modified_report = report[0...index] + report[(index + 1)..]
+
+      # Check if this modified report is safe
+      if safe_report?(modified_report)
+        found_safe = true
+        break
+      end
+    end
+
+    safe_reports += 1 if found_safe
+  end
+  safe_reports
+end
+
+def safe_report?(report)
+  # Check if sorted (increasing or decreasing)
+  return false unless sorted?(report)
+
+  # Check if all adjacent differences are between 1 and 3
+  report.each_with_index do |level, index|
+    next if index == report.length - 1
+    variance = (level - report[index + 1]).abs
+    return false unless (1..3).cover?(variance)
+  end
+
+  true
 end
 
 def sorted?(lane)
@@ -32,5 +58,5 @@ end
 
 if __FILE__ == $0
   puts "Part 1: #{solve_part1("input.txt")}"
-  # puts "Part 2: #{solve_part2("input.txt")}"
+  puts "Part 2: #{solve_part2("input.txt")}"
 end
