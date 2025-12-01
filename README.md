@@ -1,8 +1,7 @@
-# Advent of Code
+# [Advent of Code](https://adventofcode.com)
 
-Solutions for [Advent of Code](https://adventofcode.com) challenges.
 
-## Current Year
+## 2025
 
 [2025 Advent of Code](https://adventofcode.com/2025/about) <img src="https://progress-bar.xyz/0" alt="Overall Progress"/>
 
