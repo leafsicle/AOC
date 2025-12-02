@@ -1,5 +1,12 @@
 def solve_part1(filename)
-  # TODO
+  diff = 50
+  count = 0
+  File.readlines(filename).each do |line|
+    turn = line.strip.tr("L", "-").delete("R").to_i
+    diff += turn
+    count += 1 if diff % 100 == 0
+  end
+  count
 end
 
 def solve_part2(filename)
