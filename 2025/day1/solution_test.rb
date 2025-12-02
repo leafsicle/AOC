@@ -8,8 +8,7 @@ class SolutionTest < Minitest::Test
   end
 
   def test_part2_with_example
-    # TODO
-    # expected = ...
-    # assert_equal expected, solve_part2("example.txt")
+    expected = 6
+    assert_equal expected, solve_part2("example.txt")
   end
 end
