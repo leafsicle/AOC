@@ -14,8 +14,16 @@ def solve_part1(filename)
 
   invalid_ids = 0
   File.readlines(filename).each do |line|
-    range = line.strip.split("-").map(&:to_i)
-    p range
+    ranges = line.strip.split(",")
+    ranges.each do |range|
+      start_range, end_range = range.split("-").map { |r| r.to_i }
+      (start_range..end_range).each do |val|
+        str = val.to_s
+        first_half = str[0, str.size / 2]
+        second_half = str[str.size / 2..]
+        invalid_ids += val if first_half == second_half
+      end
+    end
   end
   invalid_ids
 end
@@ -25,6 +33,6 @@ def solve_part2(filename)
 end
 
 if __FILE__ == $0
-  puts "Part 1: #{solve_part1('input.txt')}"
-  puts "Part 2: #{solve_part2('input.txt')}"
+  puts "Part 1: #{solve_part1("input.txt")}"
+  puts "Part 2: #{solve_part2("input.txt")}"
 end
