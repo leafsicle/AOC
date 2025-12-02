@@ -23,6 +23,11 @@ puts "Created #{day_dir}/example.txt"
 
 File.write("#{day_dir}/input.txt", "")
 puts "Created #{day_dir}/input.txt"
+
+# Create day markdown file
+File.write("#{day_dir}/day#{day}.md", "")
+puts "Created #{day_dir}/day#{day}.md"
+
 # Create solution.rb
 solution_content = <<~RUBY
   def solve_part1(filename)

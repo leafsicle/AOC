@@ -3,7 +3,7 @@
 
 ## 2025
 
-<img src="https://progress-bar.xyz/0" alt="Overall Progress"/>
+<img src="https://progress-bar.xyz/9" alt="Overall Progress"/>
 
 ## Setup
 
